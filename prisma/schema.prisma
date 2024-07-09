@@ -15,7 +15,7 @@ datasource db {
 
 model Story {
   id        String   @id @default(dbgenerated("concat('story_', replace(cast(gen_random_uuid() as text), '-', ''))")) @db.Text
-  content   String
+  content   String?
   authorId  String
   topics    String[]
   publish   Boolean  @default(false)
