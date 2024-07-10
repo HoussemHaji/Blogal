@@ -251,8 +251,8 @@ const CodeBlock = () => {
 
     return (
         <div className='w-full'>
-            <div className='prose w-full relative bg-gray-50 rounded-sm p-5 focus:outline-none'>
-                <select contentEditable={false} className='bg-gray-100 border-dotted border-[2px] rounded-sm p-1 text-stone-700' defaultValue={"Language"} onChange={handleLanguageChange} name="" id="">
+            <div className='prose w-full relative bg-slate-300 rounded-md  p-5 focus:outline-none'>
+                <select contentEditable={false} className='bg-slate-400 border-dotted border-[2px] rounded-sm p-1 text-stone-700' defaultValue={"Language"} onChange={handleLanguageChange} name="" id="">
                     <option value="javascript">Javascript</option>
                     <option value="python">Python</option>
                     <option value="java">Java</option>
@@ -268,6 +268,6 @@ const CodeBlock = () => {
                 </div>
             </div>
             <p data-p-placeholder='...'></p>
-        </div>
+        </div >
     )
 }
