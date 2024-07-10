@@ -22,3 +22,39 @@ export async function POST(req : NextRequest){
         
     }
 }
+
+export async function PATCH(req: NextRequest){
+    const {userId} : {userId: string | null} = auth()
+    if(!userId){
+        throw new Error("Unauthorized")
+    }
+    const body = await req.json()
+    const {storyId, content} = body
+
+    if(!storyId || !content){
+        throw new Error("Story ID and content are required")
+    }
+
+    const Story = await prisma.story.findUnique({
+        where: {
+            id: storyId
+        }
+    })
+
+    if (!Story) {
+        throw new Error("Story not found")
+    }
+
+    try {
+        await prisma.story.update({
+            where: {
+                id: storyId
+            },
+            data: {
+                content
+            }})
+            return NextResponse.json({message: "Story updated successfully"})
+    } catch (error) {
+        return NextResponse.error()
+    }
+}
