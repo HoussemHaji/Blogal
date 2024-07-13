@@ -9,6 +9,8 @@ import ClapComponent from './ClapComponent'
 import CommentComponent from './CommentComponent'
 import SaveComponent from './SaveComponent'
 import ShareComponent from './ShareComponent'
+import { clapCount, clapCountByUser } from '@/actions/Clap'
+import { getCurrentUser } from '@/actions/User'
 
 type Props = {
     AuthorFirstName: string | null
@@ -40,6 +42,13 @@ const RenderStory = async ({ AuthorFirstName, AuthorImage, AuthorLastName, Publi
         : content;
 
     const finalSanitizedContent = sanitizedContent.replace(/<h1[^>]*>[\s\S]*?<\/h1>|<select[^>]*>[\s\S]*?<\/select>|<textarea[^>]*>[\s\S]*?<\/textarea>/gi, '');
+
+    const clapCounts = await clapCount(PublishedStory.id)
+
+    const clapCountsByUser = await clapCountByUser(PublishedStory.id)
+
+    const currentUser = await getCurrentUser()
+
     return (
         <div className='flex items-center justify-center mt-6 max-w-[800px] mx-auto'>
             <div>
@@ -56,8 +65,8 @@ const RenderStory = async ({ AuthorFirstName, AuthorImage, AuthorLastName, Publi
 
                 <div className='border-y-[1px] border-neutral-200 py-3 mt-6 flex items-center justify-between px-3'>
                     <div className='flex items-center space-x-4'>
-                        <ClapComponent />
-                        <CommentComponent />
+                        <ClapComponent storyId={PublishedStory.id} clapCount={clapCounts} userClaps={clapCountsByUser} />
+                        <CommentComponent AuthorFirstName={currentUser.firstName} AuthorLastName={currentUser.lastName} AuthorImage={currentUser.imageUrl} />
                     </div>
                     <div className='flex items-center space-x-4'>
                         <SaveComponent />

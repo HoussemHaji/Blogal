@@ -15,38 +15,35 @@ datasource db {
 
 model Story {
   id        String    @id @default(dbgenerated("concat('story_', replace(cast(gen_random_uuid() as text), '-', ''))")) @db.Text
-  content   String?
   authorId  String
+  content   String?
   topics    String[]
   publish   Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Clap      Clap[]
-  Comment   Comment[]
+  Comments  Comment[]
   Save      Save[]
 }
 
 model Comment {
   id              String    @id @default(dbgenerated("concat('comment_', replace(cast(gen_random_uuid() as text), '-', ''))")) @db.Text
-  content         String?
-  authorId        String
-  storyId         String
+  content         String
   createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  userId          String
+  storyId         String
   story           Story     @relation(fields: [storyId], references: [id], onDelete: Cascade)
-  Clap            Clap[]
   parentCommentId String?
-  parentComment   Comment?  @relation("Comment to comment", fields: [parentCommentId], references: [id], onDelete: Cascade)
-  replies         Comment[] @relation("Comment to comment")
+  parentComment   Comment?  @relation("Comment to Comment", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  replies         Comment[] @relation("Comment to Comment")
+  Clap            Clap[]
 }
 
 model Clap {
   id        String   @id @default(dbgenerated("concat('clap_', replace(cast(gen_random_uuid() as text), '-', ''))")) @db.Text
-  storyId   String
   userId    String
+  storyId   String
   story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   commentId String?
   Comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   clapCount Int      @default(0)
@@ -54,17 +51,14 @@ model Clap {
 
 model Save {
   id        String   @id @default(dbgenerated("concat('save_', replace(cast(gen_random_uuid() as text), '-', ''))")) @db.Text
-  storyId   String
-  userId    String
-  story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  userId    String
+  storyId   String
+  story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
 }
 
-model Following{
-  id        String   @id @default(dbgenerated("concat('following_', replace(cast(gen_random_uuid() as text), '-', ''))")) @db.Text
-  followerId String
+model Following {
+  id          String @id @default(dbgenerated("concat('following_', replace(cast(gen_random_uuid() as text), '-', ''))")) @db.Text
+  followerId  String
   followingId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
 }
