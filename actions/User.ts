@@ -1,4 +1,3 @@
-
 import { auth, clerkClient } from "@clerk/nextjs/server"
 
 export const getCurrentUserId=()=>{

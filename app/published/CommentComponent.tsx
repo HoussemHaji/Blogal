@@ -1,8 +1,15 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
+import { getComments } from '@/actions/comments'
+import { getUser } from '@/actions/User'
+import { Clap, Comment } from '@prisma/client'
 import axios from 'axios'
 import { CopyX, MessageCircleMore, Send } from 'lucide-react'
 import { usePathname } from 'next/navigation'
-import React from 'react'
+import { comment } from 'postcss'
+import React, { useEffect } from 'react'
+import UserBadge from './AuthorBadge'
+import AuthorBadge from './AuthorBadge'
 
 type Props = {
     AuthorImage: string,
@@ -28,16 +35,33 @@ const CommentComponent = ({ AuthorImage, AuthorFirstName, AuthorLastName }: Prop
             console.log('error posting comment')
         }
     }
+    const [comments, setComments] = React.useState<Comments[]>([])
+
+    useEffect(() => {
+        const fetchComment = async () => {
+            try {
+                const result = await getComments(storyId)
+                if (result && result.response) {
+                    setComments(result.response)
+                } else {
+                    console.log('no response')
+                }
+            } catch (error) {
+                console.log("Error fetching comments")
+            }
+        }
+        fetchComment()
+    }, [])
 
     return (
         <div >
             <button onClick={() => setShowSideComp(!showSideComp)} className='flex items-center opacity-60'>
                 <MessageCircleMore color="#000000" strokeWidth={0.75} width={20} />
-                <p className='text-sm'>3</p>
+                <p className='text-sm'> {comments.length} </p>
             </button>
             <div className={`h-screen fixed top-0 right-0 w-[400px] shadow-xl bg-white z-20 duration-200 ease-linear transform overflow-y-scroll ${showSideComp ? "translate-x-0" : "translate-x-[450px]"}`}>
                 <div className='px-6 pt-6 flex items-center justify-between'>
-                    <p className='font-medium'>Responses (83)</p>
+                    <p className='font-medium'>Responses ({comments.length})</p>
                     <span onClick={() => setShowSideComp(false)} className='cursor-pointer opacity-60 scale-150'>
                         &times;
                     </span>
@@ -61,6 +85,7 @@ const CommentComponent = ({ AuthorImage, AuthorFirstName, AuthorLastName }: Prop
                         </div>
 
                     </div>
+                    <RenderComments storyId={storyId} />
                 </div>
             </div>
         </div>
@@ -68,3 +93,61 @@ const CommentComponent = ({ AuthorImage, AuthorFirstName, AuthorLastName }: Prop
 }
 
 export default CommentComponent
+
+interface Comments extends Comment {
+    replies: Comment[]
+    Clap: Clap[]
+}
+
+const RenderComments = ({ storyId, parentCommentId }: { storyId: string, parentCommentId?: string }) => {
+    const [comments, setComments] = React.useState<Comments[]>([])
+
+    useEffect(() => {
+        const fetchComment = async () => {
+            try {
+                const result = await getComments(storyId, parentCommentId)
+                if (result && result.response) {
+                    setComments(result.response)
+                } else {
+                    console.log('no response')
+                }
+            } catch (error) {
+                console.log("Error fetching comments")
+            }
+        }
+        fetchComment()
+    }, [])
+
+
+
+
+
+
+    return (
+        <div className='py-10 border-t-[1px]'>
+            {comments.map((comment, index) => {
+                const clapCounts = comment.Clap.map((clap) => clap.clapCount)
+                const totalClaps = clapCounts.reduce((acc, curr) => acc + curr, 0)
+
+
+                return (
+                    <div key={index} className='m-4 mt-5 py-4 border-b-[1px] rounded-3xl px-7 border-neutral-100'>
+                        <AuthorBadge UserId={comment.userId} createdAt={comment.createdAt} />
+
+                    </div>
+                )
+            })}
+        </div>
+    )
+
+}
+
+const UserEngagement = ({ storyId, comment, totalClaps }: { storyId: string, comment: Comments, totalClaps: number }) => {
+
+    return (
+        <div></div>
+    )
+
+}
+
+
