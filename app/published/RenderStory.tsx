@@ -11,6 +11,7 @@ import SaveComponent from './SaveComponent'
 import ShareComponent from './ShareComponent'
 import { clapCount, clapCountByUser } from '@/actions/Clap'
 import { getCurrentUser } from '@/actions/User'
+import { checkSave } from '@/actions/Save'
 
 type Props = {
     AuthorFirstName: string | null
@@ -49,6 +50,8 @@ const RenderStory = async ({ AuthorFirstName, AuthorImage, AuthorLastName, Publi
 
     const currentUser = await getCurrentUser()
 
+    const savedStatus = await checkSave(PublishedStory.id)
+
     return (
         <div className='flex items-center justify-center mt-6 max-w-[800px] mx-auto lg:px-0 px-10'>
             <div>
@@ -69,7 +72,7 @@ const RenderStory = async ({ AuthorFirstName, AuthorImage, AuthorLastName, Publi
                         <CommentComponent AuthorFirstName={currentUser.firstName} AuthorLastName={currentUser.lastName} AuthorImage={currentUser.imageUrl} />
                     </div>
                     <div className='flex items-center space-x-4'>
-                        <SaveComponent />
+                        <SaveComponent storyId={PublishedStory.id} saveStatus={savedStatus.status} />
                         <ShareComponent />
 
                         <button>
