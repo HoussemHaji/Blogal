@@ -7,9 +7,11 @@ import axios from 'axios'
 import { CopyX, MessageCircleMore, Send } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { comment } from 'postcss'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import UserBadge from './AuthorBadge'
 import AuthorBadge from './AuthorBadge'
+import { clapCount, clapCountByUser } from '@/actions/Clap'
+import ClapComponent from './ClapComponent'
 
 type Props = {
     AuthorImage: string,
@@ -133,6 +135,7 @@ const RenderComments = ({ storyId, parentCommentId }: { storyId: string, parentC
                 return (
                     <div key={index} className='m-4 mt-5 py-4 border-b-[1px] rounded-3xl px-7 border-neutral-100'>
                         <AuthorBadge UserId={comment.userId} createdAt={comment.createdAt} />
+                        <UserEngagement storyId={storyId} comment={comment} totalClaps={totalClaps} />
 
                     </div>
                 )
@@ -144,10 +147,89 @@ const RenderComments = ({ storyId, parentCommentId }: { storyId: string, parentC
 
 const UserEngagement = ({ storyId, comment, totalClaps }: { storyId: string, comment: Comments, totalClaps: number }) => {
 
+    const [showCommentArea, setShowCommentArea] = React.useState(false)
+    const [showReplyComments, setShowReplyComments] = React.useState(false)
+    const [userClaps, setUserClaps] = React.useState<number>()
+
+    useEffect(() => {
+        const fetchUserClaps = async () => {
+            try {
+                const claps = await clapCountByUser(storyId, comment.id)
+                setUserClaps(claps)
+            } catch (error) {
+                console.log('error fetching claps')
+            }
+        }
+        fetchUserClaps()
+    }, [storyId])
+
     return (
-        <div></div>
+        <div>
+            <div className='flex items-center justify-between'>
+                <div className='flex items-center space-x-3'>
+                    <ClapComponent storyId={storyId} clapCount={totalClaps} commentId={comment.id} userClaps={userClaps || 0} />
+                    {comment.replies.length > 0 && (
+                        <button onClick={() => setShowReplyComments(!showReplyComments)} className='flex items-center space-x-2 text-sm opacity-80'>
+                            <svg width="24" height="24" viewBox="0 0 24 24" className="ku"><path d="M18 16.8a7.14 7.14 0 0 0 2.24-5.32c0-4.12-3.53-7.48-8.05-7.48C7.67 4 4 7.36 4 11.48c0 4.13 3.67 7.48 8.2 7.48a8.9 8.9 0 0 0 2.38-.32c.23.2.48.39.75.56 1.06.69 2.2 1.04 3.4 1.04.22 0 .4-.11.48-.29a.5.5 0 0 0-.04-.52 6.4 6.4 0 0 1-1.16-2.65v.02zm-3.12 1.06l-.06-.22-.32.1a8 8 0 0 1-2.3.33c-4.03 0-7.3-2.96-7.3-6.59S8.17 4.9 12.2 4.9c4 0 7.1 2.96 7.1 6.6 0 1.8-.6 3.47-2.02 4.72l-.2.16v.26l.02.3a6.74 6.74 0 0 0 .88 2.4 5.27 5.27 0 0 1-2.17-.86c-.28-.17-.72-.38-.94-.59l.01-.02z"></path>
+                            </svg>
+                            {comment.replies.length} Replies
+                        </button>
+                    )}
+                    <div>
+                        <button onClick={() => setShowCommentArea(!showCommentArea)} className='text-sm opacity-80'>
+                            Reply
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {showReplyComments && (
+                <ReplyComments storyId={comment.storyId} parentCommentId={comment.id} />
+            )}
+            {showCommentArea && (
+                <div className='border-l-[3px] ml-5'>
+                    <CommentArea setShowCommentArea={setShowCommentArea} commentId={comment.id} />
+                </div>
+            )}
+        </div>
     )
 
+}
+
+
+const ReplyComments = ({ storyId, parentCommentId }: {
+    storyId: string, parentCommentId: string
+}) => {
+    const [userClaps, setUserclaps] = useState<number>()
+    const [totalClaps, setTotalClaps] = useState<number>()
+
+    useEffect(() => {
+        const fetchClapCountByUser = async () => {
+            try {
+                const claps = await clapCountByUser(storyId, parentCommentId)
+                setUserclaps(claps)
+            } catch (error) {
+                console.log("Error fetching the user claps")
+            }
+        }
+
+        const fetchTotalClaps = async () => {
+            try {
+                const claps = await clapCount(storyId, parentCommentId)
+                setTotalClaps(claps)
+            } catch (error) {
+                console.log("Error fetching the  claps")
+            }
+        }
+
+        fetchTotalClaps()
+        fetchClapCountByUser()
+    }, [storyId])
+
+    return (
+        <div>
+            <RenderComments storyId={storyId} parentCommentId={parentCommentId} />
+        </div>
+    )
 }
 
 
