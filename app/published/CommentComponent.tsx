@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { getComments } from '@/actions/comments'
@@ -135,6 +136,7 @@ const RenderComments = ({ storyId, parentCommentId }: { storyId: string, parentC
                 return (
                     <div key={index} className='m-4 mt-5 py-4 border-b-[1px] rounded-3xl px-7 border-neutral-100'>
                         <AuthorBadge UserId={comment.userId} createdAt={comment.createdAt} />
+                        <p className='py-3 text-neutral-600 text-sm '>{comment.content}</p>
                         <UserEngagement storyId={storyId} comment={comment} totalClaps={totalClaps} />
 
                     </div>
@@ -228,6 +230,48 @@ const ReplyComments = ({ storyId, parentCommentId }: {
     return (
         <div>
             <RenderComments storyId={storyId} parentCommentId={parentCommentId} />
+        </div>
+    )
+}
+
+const CommentArea = ({ commentId, setShowCommentArea }: { commentId: string, setShowCommentArea: React.Dispatch<React.SetStateAction<boolean>> }) => {
+    const [Content, setContent] = useState<string>()
+    const pathname = usePathname()
+    const storyId = pathname.split('/')?.[2] as string
+
+    const replyComment = async () => {
+        try {
+            await axios.post('/api/replycomments', {
+                storyId,
+                Content,
+                parentCommentId: commentId
+            })
+            setContent('')
+            console.log('Success')
+        } catch (error) {
+            console.log("Error while replying to comment", error)
+        }
+    }
+    return (
+        <div className='m-4 shadow-md rounded-3xl'>
+            <textarea
+                value={Content}
+                onChange={e => setContent(e.target.value)}
+                placeholder='what are your thoughts?'
+                className='w-full h-[80px] p-3 focus:outline-none placeholder:text-sm text-sm mt-3'
+            />
+            <div className='flex flex-row-reverse p-3'>
+                <div className='flex items-center space-x-4'>
+                    <button onClick={() => { setShowCommentArea(false); setContent('') }} className='text-sm'>
+                        <CopyX color="black" width={20} className='opacity-60 hover:stroke-red-500 transform duration-150' />
+
+                    </button>
+                    <button onClick={replyComment} className='text-sm  rounded-full text-white'>
+                        <Send color="black" width={20} className='opacity-60 hover:stroke-blue-500 transform duration-150' />
+
+                    </button>
+                </div>
+            </div>
         </div>
     )
 }

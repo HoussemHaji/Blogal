@@ -27,7 +27,8 @@ export const getComments = async(storyId:string, parentCommentId?:string)=>{
         
         const comments = await prisma.comment.findMany({
             where:{
-                storyId
+                storyId,
+                parentCommentId:null
             },
             include:{
                 Clap:true,

@@ -36,7 +36,7 @@ const AuthorBadge = ({ UserId, createdAt }: Props) => {
     if (!User) return null
 
     return (
-        <div className='px-4 text-sm'>
+        <div className=' text-sm'>
             <div className='flex items-center space-x-3'>
                 <Image
                     src={User?.imageUrl ? User.imageUrl : "/no-image.jpg"}
