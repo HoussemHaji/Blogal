@@ -50,7 +50,7 @@ const RenderStory = async ({ AuthorFirstName, AuthorImage, AuthorLastName, Publi
     const currentUser = await getCurrentUser()
 
     return (
-        <div className='flex items-center justify-center mt-6 max-w-[800px] mx-auto'>
+        <div className='flex items-center justify-center mt-6 max-w-[800px] mx-auto lg:px-0 px-10'>
             <div>
                 <div className='flex items-center space-x-5'>
 
