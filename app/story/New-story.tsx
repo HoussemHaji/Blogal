@@ -129,7 +129,7 @@ const NewStory = ({ storyId, StoryContent }: Props) => {
     }
 
     const insertCodeBlock = () => {
-        const codeBlock = <CodeBlock />
+        const codeBlock = <CodeBlock handleSave={debouncedHandleSave} />
         setOpenTools(false)
         const wrapperDiv = document.createElement('div')
         const root = createRoot(wrapperDiv)
@@ -218,7 +218,7 @@ const Divider = () => {
     )
 }
 
-const CodeBlock = () => {
+const CodeBlock = ({ handleSave }: { handleSave: () => void }) => {
     const [language, setLanguage] = useState('javascript')
     const [code, setCode] = useState('')
     const [highlightedCode, setHighlightedCode] = useState('')
@@ -247,12 +247,13 @@ const CodeBlock = () => {
             ignoreIllegals: true
         }).value
         setHighlightedCode(highlighted)
+        handleSave()
     }, [code, language, highlightedCode])
 
     return (
         <div className='w-full'>
-            <div className='prose w-full relative bg-slate-300 rounded-md  p-5 focus:outline-none'>
-                <select contentEditable={false} className='bg-slate-400 border-dotted border-[2px] rounded-sm p-1 text-stone-700' defaultValue={"Language"} onChange={handleLanguageChange} name="" id="">
+            <div className='prose w-full relative bg-gray-100 rounded-md  p-5 focus:outline-none'>
+                <select contentEditable={false} className='bg-gray-200 border-dotted border-[2px] focus:outline-none rounded-sm p-1 text-stone-700' defaultValue={"Language"} onChange={handleLanguageChange} name="" id="">
                     <option value="javascript">Javascript</option>
                     <option value="python">Python</option>
                     <option value="java">Java</option>

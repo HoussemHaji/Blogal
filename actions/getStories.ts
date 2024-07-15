@@ -1,5 +1,6 @@
 "use server"
 import prisma from "@/app/prismadb";
+import { response } from "express";
 
 export const getStoryById = async (storyId: string) => {
     if(!storyId){
@@ -41,4 +42,23 @@ export const getPublishedStoryById = async (storyId: string) => {
         
     }
 
+}
+
+export const getStoriesByAuthor = async(storyId:string, AuthorId:string)=>{
+    try {
+        const AuthorStories = await prisma.story.findMany({
+            where: {
+                authorId: AuthorId,
+                NOT:{
+                    id: storyId
+                },
+                publish:true    
+            }
+            
+        })
+
+        return {response: AuthorStories}
+    } catch (error) {
+        return {error: "Error fetching stories"}
+    }
 }

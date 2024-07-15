@@ -3,6 +3,7 @@ import { getPublishedStoryById } from "@/actions/getStories";
 import { getUser } from "@/actions/User";
 import RenderStory from "../RenderStory";
 import { ST } from "next/dist/shared/lib/utils";
+import AuthorSpecific from "../AuthorSpecific";
 
 const page = async ({ params }: { params: { storyId: string } }) => {
 
@@ -19,6 +20,7 @@ const page = async ({ params }: { params: { storyId: string } }) => {
         <div >
             <Navbar />
             <RenderStory AuthorFirstName={User?.firstName} AuthorLastName={User?.lastName} AuthorImage={User?.imageUrl} PublishedStory={Story.response} />
+            <AuthorSpecific PublishedStory={Story.response} AuthorFirstName={User?.firstName} AuthorLastName={User?.lastName} AuthorImage={User?.imageUrl} />
         </div>
     )
 }

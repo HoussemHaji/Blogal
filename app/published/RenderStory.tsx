@@ -54,7 +54,7 @@ const RenderStory = async ({ AuthorFirstName, AuthorImage, AuthorLastName, Publi
     const savedStatus = await checkSave(PublishedStory.id)
 
     return (
-        <div className='flex items-center justify-center mt-6 max-w-[800px] mx-auto lg:px-0 px-10'>
+        <div className='flex items-center justify-center mt-6 max-w-[700px] mx-auto lg:px-0 px-10'>
             <div>
                 <div className='flex items-center space-x-5'>
 
@@ -81,7 +81,7 @@ const RenderStory = async ({ AuthorFirstName, AuthorImage, AuthorLastName, Publi
                         </button>
                     </div>
                 </div>
-                <div className='prose my-5 font-mono' dangerouslySetInnerHTML={{ __html: finalSanitizedContent }}></div>
+                <div className='prose my-5 font-mono w-full' dangerouslySetInnerHTML={{ __html: finalSanitizedContent }}></div>
             </div>
         </div >
     )

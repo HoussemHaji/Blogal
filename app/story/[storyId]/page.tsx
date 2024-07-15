@@ -4,6 +4,7 @@ import NavbarStory from '../NavbarStory'
 import { getStoryById } from '../../../actions/getStories';
 import { getCurrentUser, getCurrentUserId } from '@/actions/User';
 import { get } from 'https';
+import { notFound } from 'next/navigation';
 
 
 const page = async ({ params }: { params: { storyId: string } }) => {
@@ -11,6 +12,12 @@ const page = async ({ params }: { params: { storyId: string } }) => {
     const Story = await getStoryById(params.storyId)
     const User = await getCurrentUser()
     const UserId = await getCurrentUserId()
+
+    if (Story.response?.authorId !== UserId) {
+        notFound()
+
+    }
+
     return (
         <div className='max-w-screen-2xl'>
             <NavbarStory storyId={params.storyId} currentUserId={UserId} currentUserFirstname={User.firstName} currentUserLastname={User.lastName} />
