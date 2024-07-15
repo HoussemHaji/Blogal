@@ -12,6 +12,7 @@ import ShareComponent from './ShareComponent'
 import { clapCount, clapCountByUser } from '@/actions/Clap'
 import { getCurrentUser } from '@/actions/User'
 import { checkSave } from '@/actions/Save'
+import FollowComponent from './FollowComponent'
 
 type Props = {
     AuthorFirstName: string | null
@@ -60,7 +61,7 @@ const RenderStory = async ({ AuthorFirstName, AuthorImage, AuthorLastName, Publi
                     <img className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 " src={AuthorImage} alt="Bordered avatar" />
 
                     <div className='text-sm'>
-                        <p > {AuthorFirstName} {AuthorLastName} <span className='font-medium cursor-pointer text-blue-600'>. follow</span> </p>
+                        <p > {AuthorFirstName} {AuthorLastName} <FollowComponent AuthorId={PublishedStory.authorId} /> </p>
                         <p className='opacity-60'>Published on {new Date(PublishedStory.updatedAt).toDateString().split(' ').slice(1, 4).join(' ')}</p>
                     </div>
                 </div>
