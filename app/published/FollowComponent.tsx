@@ -37,17 +37,19 @@ function FollowComponent({ AuthorId }: Props) {
         fetchCurrentUser()
     }, [AuthorId])
 
-    const FollowAuthor = async (AuthorId: string) => {
+    const FollowAuthor = async () => {
+        setIsFollowed(!isFollowed)
         try {
             await axios.post("/api/follow", { AuthorId })
             console.log("Success Following")
         } catch (error) {
             console.log("Error Following", error)
+            setIsFollowed(!isFollowed)
         }
     }
 
     return (
-        <span onClick={() => FollowAuthor(AuthorId)} className={`font-medium  cursor-pointer ${isFollowed ? "text-green-700" : "text-red-400"} ${currentUserId === AuthorId ? "hidden" : ""}`}>. {`${isFollowed ? "followed" : "follow"}`}</span>
+        <span onClick={() => FollowAuthor()} className={`font-medium  cursor-pointer ${isFollowed ? "text-blue-500" : "text-red-400"} ${currentUserId === AuthorId ? "hidden" : ""}`}>. {`${isFollowed ? "unfollow" : "follow"}`}</span>
     )
 }
 
