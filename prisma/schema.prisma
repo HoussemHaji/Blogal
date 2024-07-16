@@ -62,3 +62,9 @@ model Following {
   followerId  String
   followingId String
 }
+
+model Topics {
+  id             String   @id @default(dbgenerated("concat('following_', replace(cast(gen_random_uuid() as text), '-', ''))")) @db.Text
+  userId         String   @unique
+  selectedTopics String[]
+}

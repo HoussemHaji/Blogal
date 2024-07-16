@@ -3,10 +3,16 @@
 import Link from 'next/link'
 import React from 'react'
 import Image from 'next/image';
-import { UserButton } from '@clerk/nextjs';
 import { ScrollText, Search } from 'lucide-react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import {
+    ClerkProvider,
+    SignInButton,
+    SignedIn,
+    SignedOut,
+    UserButton
+} from '@clerk/nextjs'
 
 type Props = {}
 
@@ -50,7 +56,13 @@ function Navbar(props: Props) {
 
                     </span>
                     <Link href='/me/drafts' className='opacity-60 flex items-center space-x-1 text-sm font-light'><ScrollText size={20} opacity={20} /> Me</Link>
-                    <UserButton signInUrl='/' />
+                    <SignedOut>
+                        <SignInButton />
+                    </SignedOut>
+                    <SignedIn>
+                        <UserButton signInUrl='/' />
+
+                    </SignedIn>
 
                 </div>
 

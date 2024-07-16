@@ -62,3 +62,53 @@ export const getStoriesByAuthor = async(storyId:string, AuthorId:string)=>{
         return {error: "Error fetching stories"}
     }
 }
+
+export const AllStoryTopics= async()=>{
+    try {
+        const allTopics = await prisma.story.findMany(
+            {
+                select: {
+                    topics: true
+                }
+            }
+        )
+
+        const uniqueTopics = Array.from(new Set(allTopics.flatMap((topic)=>topic.topics)))
+
+        const formattedTopics = uniqueTopics.map((topic)=>{
+            return {label: topic, value: topic}
+        })
+
+        return {response: formattedTopics}
+    } catch (error) {
+        return {response: []}
+        
+    }
+}
+
+export const getStoryByTag = async(tag:string)=>{
+    try {
+
+        if(tag === "All"){
+            const AllStories = await prisma.story.findMany({
+                where: {
+                    publish: true
+                }
+            })
+
+            return {stories: AllStories}
+        }
+        const AllStories = await prisma.story.findMany({
+            where: {
+                topics: {
+                    has: tag
+                },
+                publish: true
+            }
+        })
+
+        return {stories: AllStories}
+    } catch (error) {
+        return {stories: []}
+    }
+}
