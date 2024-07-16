@@ -20,7 +20,7 @@ const page = async ({ params }: { params: { storyId: string } }) => {
         <div >
             <Navbar />
             <RenderStory AuthorFirstName={User?.firstName} AuthorLastName={User?.lastName} AuthorImage={User?.imageUrl} PublishedStory={Story.response} />
-            <AuthorSpecific PublishedStory={Story.response} AuthorFirstName={User?.firstName} AuthorLastName={User?.lastName} AuthorImage={User?.imageUrl} />
+            <AuthorSpecific PublishedStory={Story.response} AuthorEmail={User?.emailAddresses[0].emailAddress} AuthorFirstName={User?.firstName} AuthorLastName={User?.lastName} AuthorImage={User?.imageUrl} />
         </div>
     )
 }

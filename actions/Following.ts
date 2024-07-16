@@ -24,3 +24,22 @@ export const CheckFollowing=async(AuthorId:string)=>{
 
     }
 }
+
+export const NumberFollowers=async(AuthorId:string)=>{
+    if(!AuthorId){
+        return {followers:0}
+    }
+
+    try {
+        const followers = await prisma.following.count({
+            where:{
+                followingId:AuthorId
+            }
+        })
+
+        return {followers}
+    } catch (error) {
+        console.log("Error in NumberFollowers",error)
+        return {followers:0}
+    }
+}
