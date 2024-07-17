@@ -160,7 +160,7 @@ export const AuthorDetail = ({ story }: { story: Story }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const User = await axios.get(`/api/user/${story.authorId}`)
+                const User = await axios.get(`/api/getUser/${story.authorId}`)
                 setuser(User.data)
             } catch (error) {
                 console.log("Error getting user", error)
