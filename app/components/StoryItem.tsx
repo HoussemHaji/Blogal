@@ -73,7 +73,7 @@ const StoryItem = ({ key, story }: Props) => {
     // Split the text into words and select the first 10
     const first30Words = textWithoutHtml.split(/\s+/).slice(0, 30).join(' ');
     return (
-        <div className='mt-5'>
+        <div className='mt-5 border-b-2 pb-3 '>
 
             <Link key={story.id} href={`/published/${story.id}`} className='my-8 border-b-[1px] pb-10 border-neutral-100'>
                 <AuthorDetail story={story} />
