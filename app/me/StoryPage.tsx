@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { getUser } from '@/actions/User'
 import { User } from '@clerk/nextjs/server'
+import { Calendar } from 'lucide-react'
 Image
 
 type Props = {
@@ -173,7 +174,9 @@ export const AuthorDetail = ({ story }: { story: Story }) => {
         <div className='flex items-center space-x-2'>
             <Image className='rounded-full' src={user?.imageUrl ? user.imageUrl : '/no-image.jpg'} width={24} height={24} alt='User Image' />
             <p className='text-sm'>{user?.firstName} {user?.lastName}. </p>
-            <p className='text-sm opacity-60'>{new Date(story.updatedAt).toDateString().split(' ').slice(1, 4).join(' ')}</p>
+            <p className='text-sm opacity-60 rounded-full bg-gray-100 py-1 px-2 flex gap-2 items-center'>
+                <Calendar width={15} strokeWidth={1} />
+                {new Date(story.updatedAt).toDateString().split(' ').slice(1, 4).join(' ')}</p>
         </div>
     )
 }

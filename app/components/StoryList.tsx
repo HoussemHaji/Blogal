@@ -48,7 +48,7 @@ function StoryList({ allTopics, UserTags }: Props) {
                     <Link key={index} href={`/?tag=${Tag.value}`} className={`pb-3 ${Tag.value === `${tag}` ? "border-b-[1px] border-neutral-950" : ""}`}>{Tag.label}</Link>
                 ))}
             </div>
-            <div className='flex flex-col gap-10'>
+            <div className='flex flex-col gap-10 '>
                 {filteredStories?.map((story: any) => (
                     <StoryItem key={story.id} story={story} />
                 ))}

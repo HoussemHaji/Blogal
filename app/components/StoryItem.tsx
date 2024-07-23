@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Story } from '@prisma/client'
 import React from 'react'
 import Image from 'next/image'
@@ -73,14 +74,17 @@ const StoryItem = ({ key, story }: Props) => {
     // Split the text into words and select the first 10
     const first30Words = textWithoutHtml.split(/\s+/).slice(0, 30).join(' ');
     return (
-        <div className='mt-5 border-b-2 pb-3 '>
+        <div className='mt-5 border-b-2 pb-5 w-full  '>
 
-            <Link key={story.id} href={`/published/${story.id}`} className='my-8 border-b-[1px] pb-10 border-neutral-100'>
-                <AuthorDetail story={story} />
-                <div className='grid md:grid-cols-4 gap-10 grid-cols-2'>
-                    <div className='md:col-span-3'>
-                        <h1 className='text-xl font-bold py-3'>{H1Element}</h1>
-                        <p className='max-md:hidden text-neutral-600 font-serif'>{first30Words} ...
+            <Link key={story.id} href={`/published/${story.id}`} className='w-full h-[500px] pb-10 border-neutral-100'>
+                <div className='flex w-full items-center '>
+                    <img src={imgSrc ? imgSrc : "/no-image.jpg"} alt='Story Image' className='w-1/2 rounded-xl ' />
+
+                    <div className=' bg-white rounded-3xl shadow-md w-[400px] flex flex-col justify-center p-5 h-80 -ml-20 mt-15'>
+                        <AuthorDetail story={story} />
+
+                        <h1 className='text-lg font-bold py-3'>{H1Element}</h1>
+                        <p className='max-md:hidden text-sm text-neutral-600 font-serif'>{first30Words} ...
                         </p>
                         <div className='flex items-center space-x-5 mt-6'>
                             {story.topics && (
@@ -90,7 +94,6 @@ const StoryItem = ({ key, story }: Props) => {
                             <SaveComponent storyId={story.id} saveStatus={SavedStatus} />
                         </div>
                     </div>
-                    <Image width={200} height={200} src={imgSrc ? imgSrc : "/no-image.jpg"} alt='Story Image' />
                 </div>
             </Link>
         </div>
