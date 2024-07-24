@@ -40,7 +40,7 @@ export async function POST(request: NextRequest){
             return NextResponse.json('Clap updated!')
         }
         else{
-            const clapStory = await prisma.clap.create({
+             await prisma.clap.create({
                 data:{
                     userId,
                     storyId:storyExist.id,
@@ -51,7 +51,6 @@ export async function POST(request: NextRequest){
             return NextResponse.json('Clap created')
         }
     } catch (error) {
-        console.log("Error clapping the story", error)
         return NextResponse.error()
     }
 }
