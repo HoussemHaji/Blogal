@@ -17,6 +17,8 @@ import {
 type Props = {}
 
 function Navbar(props: Props) {
+
+    const [searchInput, setSearchInput] = React.useState('')
     const router = useRouter()
 
 
@@ -33,6 +35,12 @@ function Navbar(props: Props) {
         }
     }
 
+    const search = (e: any) => {
+        if (e.key === 'Enter') {
+            router.push(`/search?for=${searchInput}`)
+        }
+    }
+
     return (
         <div className='px-8 py-2 border-b-[1px] '>
             <div className='flex items-center justify-between'>
@@ -42,8 +50,8 @@ function Navbar(props: Props) {
                         <Image src='/logo.png' alt='logo' width={100} height={100} className='cursor-pointer' />
                     </Link>
                     <div className='flex items-center bg-gray-50 rounded-full px-1 '>
-                        <Search size={20} className="opacity-50" />
-                        <input type="text" placeholder='Search...' className='focus:outline-none px-1 py-2 placeholder:text-sm text-sm bg-gray-50 rounded-full' />
+                        <Search size={20} className="opacity-50" onClick={() => { router.push(`/search?${searchInput}`) }} />
+                        <input onChange={(e) => { setSearchInput(e.target.value) }} onKeyDown={(e) => { search(e) }} type="text" placeholder='Search...' className='focus:outline-none px-1 py-2 placeholder:text-sm text-sm bg-gray-50 rounded-full' />
                     </div>
                 </div>
                 <div className='flex items-center space-x-7'>

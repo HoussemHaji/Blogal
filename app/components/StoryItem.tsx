@@ -78,9 +78,9 @@ const StoryItem = ({ key, story }: Props) => {
 
             <Link key={story.id} href={`/published/${story.id}`} className='w-full h-[500px] pb-10 border-neutral-100'>
                 <div className='flex w-full items-center '>
-                    <img src={imgSrc ? imgSrc : "/no-image.jpg"} alt='Story Image' className='w-1/2 rounded-xl ' />
+                    <img src={imgSrc ? imgSrc : "/no-image.jpg"} alt='Story Image' className='w-7/12 rounded-xl ' />
 
-                    <div className=' bg-white rounded-3xl shadow-md w-[400px] flex flex-col justify-center p-5 h-80 -ml-20 mt-15'>
+                    <div className=' bg-white rounded-3xl shadow-md w-[400px] flex flex-col justify-center p-5 h-64 -ml-20 mt-15'>
                         <AuthorDetail story={story} />
 
                         <h1 className='text-lg font-bold py-3'>{H1Element}</h1>
