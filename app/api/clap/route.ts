@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/app/prismadb";
-import { Story } from '@prisma/client';
 
 export async function POST(req: NextRequest) {
     const {userId}= auth()
@@ -48,7 +47,6 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({message: "Clapped successfully"})
         }
     } catch (error) {
-        console.log(error)
         return NextResponse.error()
     }
 }
